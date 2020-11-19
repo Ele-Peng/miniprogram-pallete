@@ -1,6 +1,44 @@
 const COLOR_SIZE = 40 // 单位色块的大小（像素个数，默认40）。以单位色块的平均像素值为作为统计单位
 const LEVEL = 32 // 色深，颜色分区参数（0-255），总256，2^8，即8bit，4个通道（rgba），即默认色深4*8bit，32bit
-export function greyTheImage(imageData) {
+
+/**
+ * 初始化图片，返回 imageData
+ * @param {*} src 图片的临时路径
+ */
+function initImage(src, callback) {
+  const image = new Image;
+  image.src = src;
+  image.onload = () => {
+    const imageData = getImageData(image);
+    callback(imageData)
+  }
+  image.onerror = () => {
+    callback([])
+  }
+}
+
+/**
+ * 获取 imageData
+ * @param {*} image 
+ */
+function getImageData(image) {
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const context = canvas.getContext('2d');
+    context.drawImage(image, 0, 0);
+    return context.getImageData(0, 0, image.width, image.height).data;
+  } catch (err) {
+    return [];
+  }
+}
+
+/**
+ * 灰度化图片
+ * @param {*} imageData 
+ */
+function greyTheImage(imageData) {
   // imageData有4个通道rgba
   for (let i = 0; i < imageData.length; i += 4) {
     let sum_rgb = 0
@@ -16,7 +54,11 @@ export function greyTheImage(imageData) {
   return imageData
 }
 
-export function getUniqueColor(imageData) {
+/**
+ * 获取平均色调
+ * @param {*} imageData 
+ */
+function getUniqueColor(imageData) {
   let res_r = 0
   let res_g = 0
   let res_b = 0
@@ -39,7 +81,11 @@ export function getUniqueColor(imageData) {
   return `rgba: rgba(${res_r},${res_g},${res_b},${res_a})`
 }
 
-export function getMainColor(imageData) {
+/**
+ * 获取主色调
+ * @param {*} imageData 
+ */
+function getMainColor(imageData) {
   let defRst = {
     rgb: '',
     rgba: '',
