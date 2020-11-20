@@ -41,15 +41,19 @@ function getImageData(image) {
 function greyTheImage(imageData) {
   // imageData有4个通道rgba
   for (let i = 0; i < imageData.length; i += 4) {
-    let sum_rgb = 0
-    // 但我们只需要rgb三通道，a-alpha通道无用
-    for (let j = 0; j < 3; j += 1) {
-      sum_rgb = sum_rgb + imageData[i + j]
-    }
-    let grey = Math.round(sum_rgb / 3)
-    imageData[i] = grey
-    imageData[i + 1] = grey
-    imageData[i + 2] = grey
+    const r = imageData[i],
+      g = imageData[i + 1],
+      b = imageData[i + 2],
+      a = imageData[i + 3];
+    // 对RGB通道进行加权平均 
+    // 人对不同通道颜色敏感值不一样
+    // 绿色敏感度高，所以加权值高
+    // 蓝色敏感度低，所以加权值低
+    const v = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    imageData[i] = v
+    imageData[i + 1] = v
+    imageData[i + 2] = v
+    imageData[i + 3] = a;
   }
   return imageData
 }
