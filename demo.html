@@ -69,15 +69,32 @@
             width: 200px;
             margin-left: 26px;
         }
+        .button {
+            width: 80px;
+            height: 24px;
+            line-height: 24px;
+            border-radius: 4px;
+            background-color: #95de64;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 1px 1px 5px #888;
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="feature-info">支持图片主色调获取、锐化、增强通道等</div>
         <div class="operator-container">
-            <div class="input-file-container">
-                <span>选择图片</span>
-                <input type="file" id="file" class="input-file-button" />
+            <div>
+              <div class="input-file-container">
+                  <span>选择图片</span>
+                  <input type="file" id="file" class="input-file-button" />
+              </div>
+              <div id="button-list" style="display: none;">
+                <div class="button" id="grey-image">灰度化图片</div>
+              </div>
             </div>
             <div class="imgfile">
                 <div class="item item_file" id="demo"></div>
@@ -89,15 +106,19 @@
 </body>
 <script src="./image-main-color.js"></script>
 <script>
+    let imageDataDefaultObj = [];
     document.getElementById("file").addEventListener("change", (e) => {
         const { files } = e.target;
-        debugger
         let file = files ? files[0] : null;
         if (!file) return ;
         getLocationUrl(file, (src) => {
-            document.getElementById("demo").innerHTML = `<img src="${src}" />`;
+            document.getElementById("demo").innerHTML = `<img src="${src}" id="image"/>`;
             initImage(src, (imageData) => {
-                const res = getMainColor(imageData);
+                imageDataDefaultObj = imageData;
+                const res = getMainColor(imageData.data);
+                if (imageData.data && imageData.data.length) {
+                  document.getElementById("button-list").style.display = "block";
+                }
                 document.getElementById('demo').style.background = res.hex;
                 document.getElementById('colors').innerHTML= '<div>图片主色调为：</div><div>HEX：'+res.hex+'</div>' +
                     '<div>HEXA：'+res.hexa+'</div>' +
@@ -105,6 +126,27 @@
                     '<div>RGBA：'+res.rgba+'</div>';
             });
         })
+    })
+
+    document.getElementById("grey-image").addEventListener("click", () => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const height = document.getElementById("image").clientHeight;
+      const width = document.getElementById("image").clientWidth;
+      const x = document.getElementById("image").clientLeft;
+      const y = document.getElementById("image").clientTop;
+      canvas.width = width;
+      canvas.height = height;
+      console.log(width);
+      console.log(height);
+      const greyImageData = greyTheImage(imageDataDefaultObj.data);
+      imageDataDefaultObj.data = greyImageData;
+      let scaleX = (width / imageDataDefaultObj.width).toFixed(2);
+      let scaleY = (height / imageDataDefaultObj.height).toFixed(2);
+      console.log(scaleX, scaleY);
+      context.scale(2, 2);
+      context.putImageData(imageDataDefaultObj, x, y);
+      document.getElementById("demo").appendChild(canvas);
     })
 
     function getLocationUrl(file, callback) {
