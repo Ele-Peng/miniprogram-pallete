@@ -39,21 +39,22 @@ function getImageData(image) {
  * @param {*} imageData 
  */
 function greyTheImage(imageData) {
+  const { data } = imageData;
   // imageData有4个通道rgba
-  for (let i = 0; i < imageData.length; i += 4) {
-    const r = imageData[i],
-      g = imageData[i + 1],
-      b = imageData[i + 2],
-      a = imageData[i + 3];
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i],
+      g = data[i + 1],
+      b = data[i + 2],
+      a = data[i + 3];
     // 对RGB通道进行加权平均 
     // 人对不同通道颜色敏感值不一样
     // 绿色敏感度高，所以加权值高
     // 蓝色敏感度低，所以加权值低
     const v = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    imageData[i] = v
-    imageData[i + 1] = v
-    imageData[i + 2] = v
-    imageData[i + 3] = a;
+    data[i] = v
+    data[i + 1] = v
+    data[i + 2] = v
+    data[i + 3] = a;
   }
   return imageData
 }
@@ -177,9 +178,9 @@ function getLevel(value) {
 function getMostColor(colorData) {
   let rst = null, len = 0;
   for (let key in colorData) {
-    console.log('colorData[key].length', colorData[key].length)
-    console.log('colorData[key].length', colorData[key])
-    console.log('colorData[key].length', key)
+    // console.log('colorData[key].length', colorData[key].length)
+    // console.log('colorData[key].length', colorData[key])
+    // console.log('colorData[key].length', key)
     colorData[key].length > len && (
       rst = colorData[key],
       len = colorData[key].length

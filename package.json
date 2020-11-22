@@ -1,0 +1,32 @@
+{
+  "name": "miniprogram-main-color",
+  "version": "1.0.0",
+  "description": "[代码片段](https://developers.weixin.qq.com/s/xQdvXCmM7ph6)",
+  "main": "image-main-color.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "http-server -c-1 -p9090",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ele-Peng/miniprogram-main-color.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-sprite": "^1.0.6",
+    "eslint-plugin-html": "^6.0.0",
+    "http-server": "^0.12.1"
+  },
+  "dependencies": {
+    "rough": "^3.0.1"
+  },
+  "bugs": {
+    "url": "https://github.com/Ele-Peng/miniprogram-main-color/issues"
+  },
+  "homepage": "https://github.com/Ele-Peng/miniprogram-main-color#readme"
+}

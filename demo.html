@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
             width: 100%;
             box-sizing: border-box;
             height: 100%;
-            background: linear-gradient(0deg,#b7eb8f, 20%, #b5f5ec);
+            background: linear-gradient(0deg, #b7eb8f, 20%, #b5f5ec);
         }
 
         .feature-info {
@@ -43,7 +44,7 @@
             text-align: center;
         }
 
-        .input-file-button{
+        .input-file-button {
             position: absolute;
             left: 0px;
             width: 80px;
@@ -63,12 +64,13 @@
             margin-top: 26px;
             margin-left: 26px;
         }
-        
+
         .item_file {
             padding: 20px;
             width: 200px;
             margin-left: 26px;
         }
+
         .button {
             width: 80px;
             height: 24px;
@@ -83,18 +85,20 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="feature-info">支持图片主色调获取、锐化、增强通道等</div>
         <div class="operator-container">
             <div>
-              <div class="input-file-container">
-                  <span>选择图片</span>
-                  <input type="file" id="file" class="input-file-button" />
-              </div>
-              <div id="button-list" style="display: none;">
-                <div class="button" id="grey-image">灰度化图片</div>
-              </div>
+                <div class="input-file-container">
+                    <span>选择图片</span>
+                    <input type="file" id="file" class="input-file-button" />
+                </div>
+                <div id="button-list" style="display: none;">
+                    <div class="button" id="grey-image">灰度化图片</div>
+                    <div class="button" id="warm-image">暖色调</div>
+                </div>
             </div>
             <div class="imgfile">
                 <div class="item item_file" id="demo"></div>
@@ -105,48 +109,90 @@
     </div>
 </body>
 <script src="./image-main-color.js"></script>
-<script>
+<script type="module">
+    import { traverse } from './lib/utils.js';
+    import { transformColor, brightness, saturate, channel } from './lib/color-matrix.js';
     let imageDataDefaultObj = [];
     document.getElementById("file").addEventListener("change", (e) => {
         const { files } = e.target;
         let file = files ? files[0] : null;
-        if (!file) return ;
+        if (!file) return;
         getLocationUrl(file, (src) => {
-            document.getElementById("demo").innerHTML = `<img src="${src}" id="image"/>`;
+            const image = document.getElementById("image");
+            if (!image) {
+                document.getElementById("demo").innerHTML = `<img src="${src}" id="image"/>`;
+            } else {
+                image.src = src;
+            }
             initImage(src, (imageData) => {
                 imageDataDefaultObj = imageData;
                 const res = getMainColor(imageData.data);
                 if (imageData.data && imageData.data.length) {
-                  document.getElementById("button-list").style.display = "block";
+                    document.getElementById("button-list").style.display = "block";
                 }
                 document.getElementById('demo').style.background = res.hex;
-                document.getElementById('colors').innerHTML= '<div>图片主色调为：</div><div>HEX：'+res.hex+'</div>' +
-                    '<div>HEXA：'+res.hexa+'</div>' +
-                    '<div>RGB：'+res.rgb+'</div>' +
-                    '<div>RGBA：'+res.rgba+'</div>';
+                document.getElementById('colors').innerHTML = '<div>图片主色调为：</div><div>HEX：' + res.hex + '</div>' +
+                    '<div>HEXA：' + res.hexa + '</div>' +
+                    '<div>RGB：' + res.rgb + '</div>' +
+                    '<div>RGBA：' + res.rgba + '</div>';
             });
         })
     })
 
     document.getElementById("grey-image").addEventListener("click", () => {
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      const height = document.getElementById("image").clientHeight;
-      const width = document.getElementById("image").clientWidth;
-      const x = document.getElementById("image").clientLeft;
-      const y = document.getElementById("image").clientTop;
-      canvas.width = width;
-      canvas.height = height;
-      console.log(width);
-      console.log(height);
-      const greyImageData = greyTheImage(imageDataDefaultObj.data);
-      imageDataDefaultObj.data = greyImageData;
-      let scaleX = (width / imageDataDefaultObj.width).toFixed(2);
-      let scaleY = (height / imageDataDefaultObj.height).toFixed(2);
-      console.log(scaleX, scaleY);
-      context.scale(2, 2);
-      context.putImageData(imageDataDefaultObj, x, y);
-      document.getElementById("demo").appendChild(canvas);
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        //   const height = document.getElementById("image").clientHeight; // 图片宽
+        //   const width = document.getElementById("image").clientWidth; // 图片高
+        const x = document.getElementById("image").clientLeft; // 居左坐标
+        const y = document.getElementById("image").clientTop; // 居右坐标
+        const tempImageDataObj = context.createImageData(imageDataDefaultObj.width, imageDataDefaultObj.height);
+        for (let i = 0; i < imageDataDefaultObj.data.length; i++) {
+            tempImageDataObj.data[i] = imageDataDefaultObj.data[i];
+            tempImageDataObj.data[i + 1] = imageDataDefaultObj.data[i + 1];
+            tempImageDataObj.data[i + 2] = imageDataDefaultObj.data[i + 2];
+            tempImageDataObj.data[i + 3] = imageDataDefaultObj.data[i + 3];
+        }
+        greyTheImage(tempImageDataObj)
+        canvas.width = imageDataDefaultObj.width;
+        canvas.height = imageDataDefaultObj.height;
+        // imageDataDefaultObj.data = greyImageData;
+        context.putImageData(tempImageDataObj, x, y);
+        var data = canvas.toDataURL("image/png", 1);
+        var img = document.getElementById("image");
+        img.src = data;
+    })
+
+    document.getElementById("warm-image").addEventListener("click", () => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        //   const height = document.getElementById("image").clientHeight; // 图片宽
+        //   const width = document.getElementById("image").clientWidth; // 图片高
+        const x = document.getElementById("image").clientLeft; // 居左坐标
+        const y = document.getElementById("image").clientTop; // 居右坐标
+        // const tempImageData = new ImageData(imageDataDefaultObj);
+        const tempImageDataObj = context.createImageData(imageDataDefaultObj.width, imageDataDefaultObj.height);
+        for (let i = 0; i < imageDataDefaultObj.data.length; i++) {
+            tempImageDataObj.data[i] = imageDataDefaultObj.data[i];
+            tempImageDataObj.data[i + 1] = imageDataDefaultObj.data[i + 1];
+            tempImageDataObj.data[i + 2] = imageDataDefaultObj.data[i + 2];
+            tempImageDataObj.data[i + 3] = imageDataDefaultObj.data[i + 3];
+        }
+        traverse(tempImageDataObj, ({ r, g, b, a }) => {
+            return transformColor(
+                [r, g, b, a],
+                channel({ r: 1.2 }),
+                brightness(1.2),
+                saturate(1.2),
+            );
+        });
+        canvas.width = imageDataDefaultObj.width;
+        canvas.height = imageDataDefaultObj.height;
+        // imageDataDefaultObj.data = tempImageData;
+        context.putImageData(tempImageDataObj, x, y);
+        var data = canvas.toDataURL("image/png", 1);
+        var img = document.getElementById("image");
+        img.src = data;
     })
 
     function getLocationUrl(file, callback) {
@@ -158,4 +204,5 @@
         }
     }
 </script>
+
 </html>
