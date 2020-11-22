@@ -98,6 +98,7 @@
                 <div id="button-list" style="display: none;">
                     <div class="button" id="grey-image">灰度化图片</div>
                     <div class="button" id="warm-image">暖色调</div>
+                    <div class="button" id="gaussian-blur-image">高斯模糊</div>
                 </div>
             </div>
             <div class="imgfile">
@@ -110,8 +111,8 @@
 </body>
 <script src="./image-main-color.js"></script>
 <script type="module">
-    import { traverse } from './lib/utils.js';
-    import { transformColor, brightness, saturate, channel } from './lib/color-matrix.js';
+    import { traverse, gaussianBlur } from './lib/utils.js';
+    import { transformColor, brightness, saturate, channel, grayscale, contrast } from './lib/color-matrix.js';
     let imageDataDefaultObj = [];
     document.getElementById("file").addEventListener("change", (e) => {
         const { files } = e.target;
@@ -185,6 +186,34 @@
                 brightness(1.2),
                 saturate(1.2),
             );
+        });
+        canvas.width = imageDataDefaultObj.width;
+        canvas.height = imageDataDefaultObj.height;
+        // imageDataDefaultObj.data = tempImageData;
+        context.putImageData(tempImageDataObj, x, y);
+        var data = canvas.toDataURL("image/png", 1);
+        var img = document.getElementById("image");
+        img.src = data;
+    })
+
+    document.getElementById("gaussian-blur-image").addEventListener("click", () => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        //   const height = document.getElementById("image").clientHeight; // 图片宽
+        //   const width = document.getElementById("image").clientWidth; // 图片高
+        const x = document.getElementById("image").clientLeft; // 居左坐标
+        const y = document.getElementById("image").clientTop; // 居右坐标
+        // const tempImageData = new ImageData(imageDataDefaultObj);
+        const tempImageDataObj = context.createImageData(imageDataDefaultObj.width, imageDataDefaultObj.height);
+        for (let i = 0; i < imageDataDefaultObj.data.length; i++) {
+            tempImageDataObj.data[i] = imageDataDefaultObj.data[i];
+            tempImageDataObj.data[i + 1] = imageDataDefaultObj.data[i + 1];
+            tempImageDataObj.data[i + 2] = imageDataDefaultObj.data[i + 2];
+            tempImageDataObj.data[i + 3] = imageDataDefaultObj.data[i + 3];
+        }
+        gaussianBlur(tempImageDataObj.data, tempImageDataObj.width, tempImageDataObj.height, 4);
+        traverse(tempImageDataObj, ({r, g, b, a}) => {
+            return transformColor([r, g, b, a], grayscale(0.5), saturate(1.2), contrast(1.1), brightness(1.2));
         });
         canvas.width = imageDataDefaultObj.width;
         canvas.height = imageDataDefaultObj.height;
