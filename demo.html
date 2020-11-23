@@ -141,6 +141,12 @@
     })
 
     document.getElementById("grey-image").addEventListener("click", () => {
+        const buttonForGaussian = document.getElementById("gaussian-blur-image");
+        const buttonForWarm = document.getElementById("warm-image");
+        const buttonForGrey = document.getElementById("grey-image");
+        buttonForGaussian.style.backgroundColor = "#95de64";
+        buttonForWarm.style.backgroundColor = "#95de64";
+        buttonForGrey.style.backgroundColor = "#888888";
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         //   const height = document.getElementById("image").clientHeight; // 图片宽
@@ -165,6 +171,12 @@
     })
 
     document.getElementById("warm-image").addEventListener("click", () => {
+        const buttonForGaussian = document.getElementById("gaussian-blur-image");
+        const buttonForWarm = document.getElementById("warm-image");
+        const buttonForGrey = document.getElementById("grey-image");
+        buttonForGaussian.style.backgroundColor = "#95de64";
+        buttonForWarm.style.backgroundColor = "#888888";
+        buttonForGrey.style.backgroundColor = "#95de64";
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         //   const height = document.getElementById("image").clientHeight; // 图片宽
@@ -197,6 +209,12 @@
     })
 
     document.getElementById("gaussian-blur-image").addEventListener("click", () => {
+        const buttonForGaussian = document.getElementById("gaussian-blur-image");
+        const buttonForWarm = document.getElementById("warm-image");
+        const buttonForGrey = document.getElementById("grey-image");
+        buttonForGaussian.style.backgroundColor = "#888888";
+        buttonForWarm.style.backgroundColor = "#95de64";
+        buttonForGrey.style.backgroundColor = "#95de64";
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         //   const height = document.getElementById("image").clientHeight; // 图片宽
