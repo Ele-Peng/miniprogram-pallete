@@ -2,112 +2,112 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            box-sizing: border-box;
-            height: 100%;
-            background: linear-gradient(0deg, #b7eb8f, 20%, #b5f5ec);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      box-sizing: border-box;
+      height: 100%;
+      background: linear-gradient(0deg, #b7eb8f, 20%, #b5f5ec);
+    }
 
-        .feature-info {
-            height: 20px;
-            line-height: 20px;
-            padding: 14px;
-            font-size: 14px;
-            color: #fff;
-        }
+    .feature-info {
+      height: 20px;
+      line-height: 20px;
+      padding: 14px;
+      font-size: 14px;
+      color: #fff;
+    }
 
-        .operator-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-        }
+    .operator-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
 
-        .input-file-container {
-            position: relative;
-            width: 80px;
-            height: 24px;
-            line-height: 24px;
-            border-radius: 4px;
-            background-color: #95de64;
-            color: #fff;
-            font-size: 14px;
-            box-shadow: 1px 1px 5px #888;
-            text-align: center;
-        }
+    .input-file-container {
+      position: relative;
+      width: 80px;
+      height: 24px;
+      line-height: 24px;
+      border-radius: 4px;
+      background-color: #95de64;
+      color: #fff;
+      font-size: 14px;
+      box-shadow: 1px 1px 5px #888;
+      text-align: center;
+    }
 
-        .input-file-button {
-            position: absolute;
-            left: 0px;
-            width: 80px;
-            opacity: 0;
-        }
+    .input-file-button {
+      position: absolute;
+      left: 0px;
+      width: 80px;
+      opacity: 0;
+    }
 
-        .item_file img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .item_file img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        .item_colors {
-            color: #fff;
-            font-size: 14px;
-            line-height: 20px;
-            margin-top: 26px;
-            margin-left: 26px;
-        }
+    .item_colors {
+      color: #fff;
+      font-size: 14px;
+      line-height: 20px;
+      margin-top: 26px;
+      margin-left: 26px;
+    }
 
-        .item_file {
-            padding: 20px;
-            width: 200px;
-            margin-left: 26px;
-        }
+    .item_file {
+      padding: 20px;
+      width: 200px;
+      margin-left: 26px;
+    }
 
-        .button {
-            width: 80px;
-            height: 24px;
-            line-height: 24px;
-            border-radius: 4px;
-            background-color: #95de64;
-            color: #fff;
-            font-size: 14px;
-            box-shadow: 1px 1px 5px #888;
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+    .button {
+      width: 80px;
+      height: 24px;
+      line-height: 24px;
+      border-radius: 4px;
+      background-color: #95de64;
+      color: #fff;
+      font-size: 14px;
+      box-shadow: 1px 1px 5px #888;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="feature-info">支持图片主色调获取、锐化、增强通道等</div>
-        <div class="operator-container">
-            <div>
-                <div class="input-file-container">
-                    <span>选择图片</span>
-                    <input type="file" id="file" class="input-file-button" />
-                </div>
-                <div id="button-list" style="display: none;">
-                    <div class="button" id="grey-image">灰度化图片</div>
-                    <div class="button" id="warm-image">暖色调</div>
-                    <div class="button" id="gaussian-blur-image">高斯模糊</div>
-                </div>
-            </div>
-            <div class="imgfile">
-                <div class="item item_file" id="demo"></div>
-                <div class="item_colors" id="colors"></div>
-            </div>
+  <div class="container">
+    <div class="feature-info">支持图片主色调获取、暖色调、美颜等</div>
+    <div class="operator-container">
+      <div>
+        <div class="input-file-container">
+          <span>选择图片</span>
+          <input type="file" id="file" class="input-file-button" />
         </div>
-        <div class="demos"></div>
+        <div id="button-list" style="display: none;">
+          <div class="button" id="grey-image">灰度化图片</div>
+          <div class="button" id="warm-image">暖色调</div>
+          <div class="button" id="gaussian-blur-image">高斯模糊</div>
+        </div>
+      </div>
+      <div class="imgfile">
+        <div class="item item_file" id="demo"></div>
+        <div class="item_colors" id="colors"></div>
+      </div>
     </div>
+    <div class="demos"></div>
+  </div>
 </body>
 <script src="./image-main-color.js"></script>
 <script type="module">
